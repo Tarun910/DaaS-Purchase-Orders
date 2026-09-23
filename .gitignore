@@ -49,3 +49,8 @@ data/
 .cache/
 tmp/
 temp/
+AGENTS.md
+CLAUDE.md
+web/AGENTS.md
+web/CLAUDE.md
+
