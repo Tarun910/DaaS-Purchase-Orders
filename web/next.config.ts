@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  // Avoid generating AGENTS.md / CLAUDE.md in the repo root during next dev
-  experimental: {},
+  // @ts-expect-error Next 16 agentRules is supported at runtime
+  agentRules: false,
 };
 
 export default nextConfig;
