@@ -4,6 +4,21 @@
 
 This repository is a take-home implementation of **one** DaaS roadmap feature slice: end-to-end purchase order receiving. It demonstrates relational inventory modelling, transactional stock updates, GraphQL API design, and a typed Next.js UI on the stack used by DaaS.
 
+## Demo
+
+Demo video:
+https://drive.google.com/file/d/1aDvTliB_urQEX6WI6EeBoqbS6qYTgWJZ/view?usp=sharing
+
+The demo covers:
+- Purchase order creation
+- Purchase order list and status filter
+- Partial stock receiving
+- PO status changing to PARTIAL
+- Receiving remaining quantity
+- PO status changing to RECEIVED
+- Role-based authorization
+- GraphQL operations
+
 ## Selected Feature
 
 **Option 1 — Sprint 2 — Purchase Order Receiving**
