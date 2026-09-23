@@ -19,6 +19,10 @@ The demo covers:
 - Role-based authorization
 - GraphQL operations
 
+Detailed written documentation (architecture, folder structure, application/database flows, run commands, and implementation process):
+
+[`docs/DaaS-Purchase-Order-Receiving-Complete-Documentation.docx`](docs/DaaS-Purchase-Order-Receiving-Complete-Documentation.docx)
+
 ## Selected Feature
 
 **Option 1 — Sprint 2 — Purchase Order Receiving**
