@@ -1,0 +1,78 @@
+enum PurchaseOrderStatus {
+  OPEN
+  PARTIAL
+  RECEIVED
+}
+
+type Vendor {
+  id: ID!
+  name: String!
+  createdAt: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  sku: String!
+  createdAt: String!
+}
+
+type Location {
+  id: ID!
+  name: String!
+  createdAt: String!
+}
+
+type PurchaseOrderItem {
+  id: ID!
+  product: Product!
+  orderedQuantity: Int!
+  receivedQuantity: Int!
+  remainingQuantity: Int!
+}
+
+type PurchaseOrder {
+  id: ID!
+  poNumber: String!
+  vendor: Vendor!
+  status: PurchaseOrderStatus!
+  items: [PurchaseOrderItem!]!
+  createdAt: String!
+  updatedAt: String!
+}
+
+input CreatePurchaseOrderItemInput {
+  productId: ID!
+  quantity: Int!
+}
+
+input CreatePurchaseOrderInput {
+  poNumber: String!
+  vendorId: ID!
+  items: [CreatePurchaseOrderItemInput!]!
+}
+
+input ReceivePurchaseOrderItemInput {
+  productId: ID!
+  quantity: Int!
+}
+
+input ReceivePurchaseOrderInput {
+  purchaseOrderId: ID!
+  locationId: ID!
+  items: [ReceivePurchaseOrderItemInput!]!
+}
+
+type ReceivePurchaseOrderPayload {
+  purchaseOrder: PurchaseOrder!
+}
+
+type Query {
+  purchaseOrders(status: PurchaseOrderStatus): [PurchaseOrder!]!
+  purchaseOrder(id: ID!): PurchaseOrder
+}
+
+type Mutation {
+  createPurchaseOrder(input: CreatePurchaseOrderInput!): PurchaseOrder!
+  receivePurchaseOrder(input: ReceivePurchaseOrderInput!): ReceivePurchaseOrderPayload!
+}

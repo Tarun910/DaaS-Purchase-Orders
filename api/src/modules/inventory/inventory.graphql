@@ -1,0 +1,20 @@
+extend type Query {
+  inventoryStock(locationId: ID): [InventoryStock!]!
+}
+
+type InventoryStock {
+  id: ID!
+  location: Location!
+  product: Product!
+  quantity: Int!
+}
+
+type StockMovement {
+  id: ID!
+  product: Product!
+  location: Location!
+  quantity: Int!
+  movementType: String!
+  referenceId: ID!
+  createdAt: String!
+}
