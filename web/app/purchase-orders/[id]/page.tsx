@@ -35,7 +35,10 @@ const receiveSchema = z.object({
     .array(
       z.object({
         productId: z.string().min(1, "Product is required"),
-        quantity: z.coerce.number().int().gt(0, "Quantity must be greater than 0"),
+        quantity: z
+          .number({ error: "Quantity must be a number" })
+          .int("Quantity must be an integer")
+          .gt(0, "Quantity must be greater than 0"),
       }),
     )
     .min(1, "At least one receive line is required"),
@@ -132,7 +135,7 @@ export default function PurchaseOrderDetailPage() {
             Vendor: {po.vendor.name}
           </Typography>
         </Box>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
           <StatusChip status={po.status} />
           <Button component={Link} href="/purchase-orders" variant="outlined">
             Back to list
@@ -238,7 +241,7 @@ export default function PurchaseOrderDetailPage() {
                 <TextField
                   label="Quantity"
                   type="number"
-                  {...register(`items.${index}.quantity`)}
+                  {...register(`items.${index}.quantity`, { valueAsNumber: true })}
                   error={Boolean(errors.items?.[index]?.quantity)}
                   helperText={errors.items?.[index]?.quantity?.message}
                   sx={{ width: { xs: "100%", md: 180 } }}

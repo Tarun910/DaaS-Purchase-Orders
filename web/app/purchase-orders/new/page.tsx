@@ -29,7 +29,10 @@ const createPoSchema = z.object({
     .array(
       z.object({
         productId: z.string().min(1, "Product is required"),
-        quantity: z.coerce.number().int().gt(0, "Quantity must be greater than 0"),
+        quantity: z
+          .number({ error: "Quantity must be a number" })
+          .int("Quantity must be an integer")
+          .gt(0, "Quantity must be greater than 0"),
       }),
     )
     .min(1, "At least one line item is required"),
@@ -180,7 +183,7 @@ export default function NewPurchaseOrderPage() {
               <TextField
                 label="Quantity"
                 type="number"
-                {...register(`items.${index}.quantity`)}
+                {...register(`items.${index}.quantity`, { valueAsNumber: true })}
                 error={Boolean(errors.items?.[index]?.quantity)}
                 helperText={errors.items?.[index]?.quantity?.message}
                 sx={{ width: { xs: "100%", md: 180 } }}
