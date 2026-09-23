@@ -1,5 +1,4 @@
 import { PrismaClient, StockMovementType } from "@prisma/client";
-import { v7 as uuidv7 } from "uuid";
 
 const prisma = new PrismaClient();
 
@@ -270,9 +269,6 @@ async function seed() {
       },
     });
   }
-
-  // Touch uuid helper so the seed stays compatible with runtime UUIDv7 usage
-  void uuidv7();
 
   console.info("Seed completed:");
   console.info("  Vendors: ABC Electronics, XYZ AV Supplies, Global Tech");
