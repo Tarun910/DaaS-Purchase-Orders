@@ -1,0 +1,117 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StockMovementType {
+  RECEIPT
+}
+
+model Vendor {
+  id        String    @id @db.Uuid
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  purchaseOrders PurchaseOrder[]
+
+  @@map("vendors")
+}
+
+model Product {
+  id        String    @id @db.Uuid
+  name      String
+  sku       String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  purchaseOrderItems PurchaseOrderItem[]
+  inventoryStock     InventoryStock[]
+  stockMovements     StockMovement[]
+
+  @@index([sku, deletedAt])
+  @@map("products")
+}
+
+model Location {
+  id        String    @id @db.Uuid
+  name      String
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  inventoryStock InventoryStock[]
+  stockMovements StockMovement[]
+
+  @@map("locations")
+}
+
+model PurchaseOrder {
+  id        String    @id @db.Uuid
+  poNumber  String    @map("po_number")
+  vendorId  String    @map("vendor_id") @db.Uuid
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  vendor Vendor              @relation(fields: [vendorId], references: [id])
+  items  PurchaseOrderItem[]
+
+  @@index([poNumber, deletedAt])
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id               String    @id @db.Uuid
+  purchaseOrderId  String    @map("purchase_order_id") @db.Uuid
+  productId        String    @map("product_id") @db.Uuid
+  orderedQuantity  Int       @map("ordered_quantity")
+  receivedQuantity Int       @default(0) @map("received_quantity")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  product       Product       @relation(fields: [productId], references: [id])
+
+  @@unique([purchaseOrderId, productId])
+  @@map("purchase_order_items")
+}
+
+model InventoryStock {
+  id         String    @id @db.Uuid
+  locationId String    @map("location_id") @db.Uuid
+  productId  String    @map("product_id") @db.Uuid
+  quantity   Int
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  location Location @relation(fields: [locationId], references: [id])
+  product  Product  @relation(fields: [productId], references: [id])
+
+  @@unique([locationId, productId])
+  @@map("inventory_stock")
+}
+
+model StockMovement {
+  id           String            @id @db.Uuid
+  productId    String            @map("product_id") @db.Uuid
+  locationId   String            @map("location_id") @db.Uuid
+  quantity     Int
+  movementType StockMovementType @map("movement_type")
+  referenceId  String            @map("reference_id") @db.Uuid
+  createdAt    DateTime          @default(now()) @map("created_at")
+
+  product  Product  @relation(fields: [productId], references: [id])
+  location Location @relation(fields: [locationId], references: [id])
+
+  @@index([referenceId])
+  @@map("stock_movements")
+}
